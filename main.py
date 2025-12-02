@@ -9,8 +9,8 @@ def secret_number() -> str:
     where the first digit is not zero.
     """
     # Length of the secret number must be <= 10
-    NUMBER_LENGTH = 4 
-    digits = [i for i in range(10)]
+    NUMBER_LENGTH: int = 4 
+    digits: list[int] = [i for i in range(10)]
     random.shuffle(digits)
     while digits[0] == 0:
         random.shuffle(digits) 
