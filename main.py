@@ -1,5 +1,8 @@
 """
 Project 2: Game Bulls & Cows
+-------------------------------
+For testing uncomment the line below in the play_game() function
+#print(f"Secret number for testing: {secret_number}")
 """
 import random
 import textwrap
@@ -103,7 +106,7 @@ def play_game() -> None:
     attempts = 0
 
     while True:
-        print(f"Secret number for debugging: {secret_number}")
+        #print(f"Secret number for testing: {secret_number}")
         number = input("Enter a number: ")
         error_message = validate_input(number)
 
