@@ -28,10 +28,36 @@ def create_secret_number() -> str:
     # Select the first NUMBER_LENGTH digits and join them into one number.
     return ''.join(map(str, digits[:NUMBER_LENGTH])) 
 
-def print_results(bulls: int, cows: int) -> None:
+def validate_input(number: str) -> str:
+    """
+    Validate the user's input and return an error message if invalid.
+    """
+    if not number.isdigit():
+        return (
+            "The entered number must contain digits only. "
+            "Please try again!"
+        )
+    if len(number) != 4:
+        return (
+            "The entered number must be 4 digits long. "
+            "Please try again!"
+        )
+    if len(set(number)) != 4:
+        return (
+            "The entered number must not contain the same digits. "
+            "Please try again!"
+        )
+    if number[0] == '0':
+        return (
+            "The entered number must not start with a zero. "
+            "Please try again!"
+        )
+    return ""
+
+def print_results(bulls: int, cows: int, attempts: int) -> None:
     if bulls == 4:
         print("Correct, you've guessed the right number "
-            f"in {i} guesses!")
+            f"in {attempts} guesses!")
         print("-----------------------------------------------")
         print("That's amazing!")
         exit()
@@ -46,27 +72,17 @@ if __name__ == "__main__":
 
     print_introduction()
     secret_number: str = create_secret_number()
-    i = 1
-    while True:
-        #print(f"Secret number for debugging: {secret_number}")
-        number: str = input("Enter a number: ")
+    attempts = 0
 
-        if not number.isdigit():
-            print("The entered number must contain digits only. "
-                "Please try again!")
+    while True:
+        print(f"Secret number for debugging: {secret_number}")
+        number: str = input("Enter a number: ")
+        error_message = validate_input(number)
+        if error_message:
+            print(error_message)
             continue
-        if len(number) != 4:
-            print("The entered number must be 4 digits long. "
-                "Please try again!")
-            continue
-        if len(set(number)) != 4:
-            print("The entered number must not contain the same digits. "
-                "Please try again!")
-            continue
-        if number[0] == '0':
-            print("The entered number must not start with a zero. "
-                "Please try again!")
-            continue
+
+        attempts += 1
 
         bulls: int = sum(
             1 
@@ -79,6 +95,5 @@ if __name__ == "__main__":
             if guess_digit in secret_number
         ) - bulls
 
-        print_results(bulls, cows)
-        i += 1
+        print_results(bulls, cows, attempts)
 
