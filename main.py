@@ -29,7 +29,18 @@ def create_secret_number() -> str:
     return ''.join(map(str, digits[:NUMBER_LENGTH])) 
 
 def print_results(bulls: int, cows: int) -> None:
-    pass
+    if bulls == 4:
+        print("Correct, you've guessed the right number "
+            f"in {i} guesses!")
+        print("-----------------------------------------------")
+        print("That's amazing!")
+        exit()
+    else:
+        bulls_word = "bull" if bulls == 1 else "bulls"
+        cows_word = "cow" if cows == 1 else "cows"
+        print(f"{bulls} {bulls_word}, {cows} {cows_word}")
+        print("-----------------------------------------------")
+    
 
 if __name__ == "__main__":
 
@@ -37,7 +48,7 @@ if __name__ == "__main__":
     secret_number: str = create_secret_number()
     i = 1
     while True:
-        print(f"Secret number for debugging: {secret_number}")
+        #print(f"Secret number for debugging: {secret_number}")
         number: str = input("Enter a number: ")
 
         if not number.isdigit():
@@ -57,13 +68,17 @@ if __name__ == "__main__":
                 "Please try again!")
             continue
 
-        bulls: int = sum(1 for s, g in zip(secret_number, number) if s == g)
-        cows: int = sum(1 for g in number if g in secret_number) - bulls
+        bulls: int = sum(
+            1 
+            for secret_digit, guess_digit in zip(secret_number, number) 
+            if secret_digit == guess_digit
+        )
+        cows: int = sum(
+            1 
+            for guess_digit in number 
+            if guess_digit in secret_number
+        ) - bulls
 
         print_results(bulls, cows)
-
-        if bulls == 4:
-            print(f"Congratulations! You guessed the number {secret_number} in {i} attempts.")
-            break
         i += 1
 
