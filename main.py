@@ -4,31 +4,6 @@ Project 2: Game Bulls & Cows
 import random
 import textwrap
 
-def print_introduction() -> None:
-    print(textwrap.dedent("""
-        Hi there!
-        -----------------------------------------------
-        I've generated a random 4 digit number for you.
-        Let's play a bulls and cows game.
-        -----------------------------------------------
-    """))
-    
-def create_secret_number() -> str:
-    """
-    Generate a number with unique digits as a string of NUMBER_LENGTH 
-    digits, where the first digit is not zero.
-    """
-    # Length of the secret number
-    NUMBER_LENGTH: int = 4 
-    digits: list[int] = [i for i in range(10)]
-
-    random.shuffle(digits)
-    while digits[0] == 0:
-        random.shuffle(digits) 
-
-    # Select the first NUMBER_LENGTH digits and join them into one number.
-    return ''.join(map(str, digits[:NUMBER_LENGTH])) 
-
 def validate_input(number: str) -> str:
     """
     Validate the user's input and return an error message if invalid.
@@ -74,7 +49,38 @@ def calc_bulls_and_cows(secret_number: str, number: str) -> tuple[int, int]:
 
     return bulls, cows
 
+def create_secret_number() -> str:
+    """
+    Generate a number with unique digits as a string of NUMBER_LENGTH 
+    digits, where the first digit is not zero.
+    """
+    # Length of the secret number
+    NUMBER_LENGTH: int = 4 
+    digits: list[int] = [i for i in range(10)]
+
+    random.shuffle(digits)
+    while digits[0] == 0:
+        random.shuffle(digits) 
+
+    # Select the first NUMBER_LENGTH digits and join them into one number.
+    return ''.join(map(str, digits[:NUMBER_LENGTH])) 
+
+def print_introduction() -> None:
+    """
+    Print the introduction message for the game.
+    """
+    print(textwrap.dedent("""
+        Hi there!
+        -----------------------------------------------
+        I've generated a random 4 digit number for you.
+        Let's play a bulls and cows game.
+        -----------------------------------------------
+    """))
+
 def print_results(bulls: int, cows: int, attempts: int) -> bool:
+    """
+    Print the results of the current guess and return whether the game is over.
+    """
     if bulls == 4:
         print("Correct, you've guessed the right number "
             f"in {attempts} guesses!")
