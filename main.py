@@ -18,13 +18,14 @@ def create_secret_number() -> str:
     Generate a number with unique digits as a string of NUMBER_LENGTH 
     digits, where the first digit is not zero.
     """
-    # Length of the secret number must be <= 10
+    # Length of the secret number
     NUMBER_LENGTH: int = 4 
     digits: list[int] = [i for i in range(10)]
 
     random.shuffle(digits)
     while digits[0] == 0:
         random.shuffle(digits) 
+
     # Select the first NUMBER_LENGTH digits and join them into one number.
     return ''.join(map(str, digits[:NUMBER_LENGTH])) 
 
@@ -52,6 +53,7 @@ def validate_input(number: str) -> str:
             "The entered number must not start with a zero. "
             "Please try again!"
         )
+    
     return ""
 
 def calc_bulls_and_cows(secret_number: str, number: str) -> tuple[int, int]:
@@ -72,30 +74,33 @@ def calc_bulls_and_cows(secret_number: str, number: str) -> tuple[int, int]:
 
     return bulls, cows
 
-def print_results(bulls: int, cows: int, attempts: int) -> None:
+def print_results(bulls: int, cows: int, attempts: int) -> bool:
     if bulls == 4:
         print("Correct, you've guessed the right number "
             f"in {attempts} guesses!")
         print("-----------------------------------------------")
         print("That's amazing!")
-        exit()
+        return True # End game here
     else:
         bulls_word = "bull" if bulls == 1 else "bulls"
         cows_word = "cow" if cows == 1 else "cows"
         print(f"{bulls} {bulls_word}, {cows} {cows_word}")
         print("-----------------------------------------------")
-    
+        return False
 
-if __name__ == "__main__":
-
-    print_introduction()
-    secret_number: str = create_secret_number()
+def play_game() -> None:
+    """
+    Main game loop for Bulls and Cows.
+    Handle user input, validate guesses, calculate results and print feedback.
+    """
+    secret_number = create_secret_number()
     attempts = 0
 
     while True:
         print(f"Secret number for debugging: {secret_number}")
-        number: str = input("Enter a number: ")
+        number = input("Enter a number: ")
         error_message = validate_input(number)
+
         if error_message:
             print(error_message)
             continue
@@ -103,7 +108,11 @@ if __name__ == "__main__":
         attempts += 1
         bulls, cows = calc_bulls_and_cows(secret_number, number)
 
-        
+        if print_results(bulls, cows, attempts):
+            break
 
-        print_results(bulls, cows, attempts)
 
+if __name__ == "__main__":
+
+    print_introduction()
+    play_game()
