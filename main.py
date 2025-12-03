@@ -54,6 +54,24 @@ def validate_input(number: str) -> str:
         )
     return ""
 
+def calc_bulls_and_cows(secret_number: str, number: str) -> tuple[int, int]:
+    """
+    Calculate the number of bulls and cows based on the secret number 
+    and the user's guess.
+    """
+    bulls: int = sum(
+        1 
+        for secret_digit, number_digit in zip(secret_number, number) 
+        if secret_digit == number_digit
+    )
+    cows: int = sum(
+        1 
+        for number_digit in number 
+        if number_digit in secret_number
+    ) - bulls
+
+    return bulls, cows
+
 def print_results(bulls: int, cows: int, attempts: int) -> None:
     if bulls == 4:
         print("Correct, you've guessed the right number "
@@ -83,17 +101,9 @@ if __name__ == "__main__":
             continue
 
         attempts += 1
+        bulls, cows = calc_bulls_and_cows(secret_number, number)
 
-        bulls: int = sum(
-            1 
-            for secret_digit, guess_digit in zip(secret_number, number) 
-            if secret_digit == guess_digit
-        )
-        cows: int = sum(
-            1 
-            for guess_digit in number 
-            if guess_digit in secret_number
-        ) - bulls
+        
 
         print_results(bulls, cows, attempts)
 
